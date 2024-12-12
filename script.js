@@ -137,15 +137,28 @@ function generateSchedule() {
     subjects.forEach(subject => {
         subject.hoursScheduled = 0; // Đặt lại số giờ đã xếp thành 0
     });
-    const alternateSubjects = document.getElementById("alternate-subjects").checked;
     schedule = [];
-    let remainingSubjects = subjects.map(s => ({name: s.name, hoursNeeded: s.hoursNeeded}));
-    let i=0;
+    let tempSubjects = subjects.map(s => ({name: s.name, hoursNeeded: s.hoursNeeded}));
+    let tempSlots = slots.map(s => ({...s}));
+    const sort = document.getElementById("sort").value;
+    if (sort == "random")
+        tempSlots.sort(() => (0.5 - Math.random()));
 
-    slots.forEach(slot => {
-        if (remainingSubjects.length === 0) return;
-
-        const subject = remainingSubjects[i];
+    tempSlots.forEach(slot => {
+        if (tempSubjects.length === 0) return;
+        let i=0;
+        if (sort == "turn") {
+            for (let j = 0; j < tempSubjects.length; j++) {
+                if (tempSubjects[j].hoursNeeded < tempSubjects[i].hoursNeeded)
+                    i = j;
+            }
+        } else {
+            for (let j = 0; j < tempSubjects.length; j++) {
+                if (tempSubjects[j].hoursNeeded > tempSubjects[i].hoursNeeded)
+                    i = j;
+            }
+        }
+        const subject = tempSubjects[i];
         schedule.push({
                 day: slot.day,
                 subject: subject.name,
@@ -155,16 +168,8 @@ function generateSchedule() {
         const index = subjects.findIndex(s => s.name === subject.name);
         subjects[index].hoursScheduled += slot.duration;
         subject.hoursNeeded -= slot.duration;
-        if (alternateSubjects) {
-            if (subject.hoursNeeded <= 0)
-                remainingSubjects.splice(i, 1);
-            else
-                i++;
-            i = i % remainingSubjects.length;
-        } else {
-            if (subject.hoursNeeded <= 0)
-                remainingSubjects.splice(i, 1);
-        }
+        if (subject.hoursNeeded <= 0)
+            tempSubjects.splice(i, 1);
     });
 
     sortSchedule(); // Sắp xếp lịch học
@@ -279,10 +284,10 @@ function saveScheduleEntry(index) {
     updateSubjectTable();
 }
 
-function calculateEndTime(start, duration) {
-    const [startHour, startMinute] = start.split(':').map(Number);
-    const totalMinutes = startHour * 60 + startMinute + duration * 60;
-    const endHour = Math.floor(totalMinutes / 60);
-    const endMinute = totalMinutes % 60;
-    return `${String(endHour).padStart(2, '0')}:${String(endMinute).padStart(2, '0')}`;
+function f(){
+    let f=0;
+    subjects.forEach((s) => {
+        f += Math.max(s.hoursNeeded - s.hoursScheduled, 0);
+    });
+    return f;
 }

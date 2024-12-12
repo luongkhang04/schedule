@@ -11,13 +11,13 @@
 </head>
 <body>
     <div class="container py-5">
-        <h1 class="text-center mb-5 text-primary">Ứng Dụng Xếp Lịch Học</h1>
+        <h1 class="text-center mb-5 text-success">Ứng Dụng Xếp Lịch Học</h1>
 
         <!-- Phần danh sách ca  -->
         <div class="card mb-4 shadow">
             <div class="card-body">
-                <h3 class="card-title text-success">Thêm Ca Học</h3>
-                <div class="row g-3 align-items-center mb-3">
+                <h3 class="card-title text-primary">Thêm Ca Học</h3>
+                <div class="row g-3 align-items-end mb-3">
                     <div class="col-md-4">
                         <label for="day" class="form-label">Ngày:</label>
                         <select id="day" class="form-select">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover">
+                    <table class="table table-hover">
                         <thead>
                             <tr class="table-primary">
                                 <th>Ngày</th>
@@ -52,7 +52,7 @@
                                 <th>Hành động</th>
                             </tr>
                         </thead>
-                        <tbody id="slot-table-body"></tbody>
+                        <tbody id="slot-table-body" style="--bs-table-bg: rgb(207 226 255 / 20%);--bs-table-hover-bg: rgb(207 226 255 / 30%);"></tbody>
                     </table>
                 </div>
                 <!-- Phần hiển thị tổng thời gian có thể học -->
@@ -66,7 +66,7 @@
         <div class="card mb-4 shadow">
             <div class="card-body">
                 <h3 class="card-title text-warning">Thêm Môn Học</h3>
-                <div class="row g-3 align-items-center mb-3">
+                <div class="row g-3 align-items-end mb-3">
                     <div class="col-md-6">
                         <label for="subject-name" class="form-label">Tên môn học:</label>
                         <input type="text" id="subject-name" class="form-control" placeholder="Ví dụ: Toán">
@@ -80,7 +80,7 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover">
+                    <table class="table table-hover">
                         <thead>
                             <tr class="table-warning">
                                 <th>Môn học</th>
@@ -89,7 +89,7 @@
                                 <th>Hành động</th>
                             </tr>
                         </thead>
-                        <tbody id="subject-table-body"></tbody>
+                        <tbody id="subject-table-body" style="--bs-table-bg: rgb(255 243 205 / 20%);--bs-table-hover-bg: rgb(255 243 205 / 30%);"></tbody>
                     </table>
                 </div>
                 <div class="card-footer text-center">
@@ -103,13 +103,21 @@
         <div class="card shadow">
             <div class="card-body">
                 <h3 class="card-title text-danger">Lịch Học</h3>
-                <div class="form-check form-switch" style="margin-bottom: 10px;">
-                    <input class="form-check-input" type="checkbox" id="alternate-subjects">
-                    <label class="form-check-label" for="alternate-subjects">Xếp đan xen các môn</label>
+                <div class="row g-3 align-items-end mb-3">
+                    <div class="col-md-10">
+                        <label for="sort" class="form-label">Cách sắp xếp các môn:</label>
+                        <select id="sort" class="form-select">
+                            <option value="random">Ngẫu nhiên</option>
+                            <option value="greedy">Đan xen</option>
+                            <option value="turn">Lần lượt</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button id="generate-schedule" class="btn btn-danger w-100 mt-4" onclick="generateSchedule()">Xếp Lịch</button>
+                    </div>
                 </div>
-                <button id="generate-schedule" class="btn btn-danger mb-3" onclick="generateSchedule()">Xếp Lịch</button>
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover">
+                    <table class="table table-hover">
                         <thead>
                             <tr class="table-danger">
                                 <th>Ngày</th>
@@ -119,7 +127,7 @@
                                 <th>Hành động</th>
                             </tr>
                         </thead>
-                        <tbody id="schedule-table-body"></tbody>
+                        <tbody id="schedule-table-body" style="--bs-table-bg: rgb(248 215 218 / 20%);--bs-table-hover-bg: rgb(248 215 218 / 30%);"></tbody>
                     </table>
                 </div>
             </div>
