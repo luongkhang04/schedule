@@ -137,7 +137,7 @@ function generateSchedule() {
     subjects.forEach(subject => {
         subject.hoursScheduled = 0; // Đặt lại số giờ đã xếp thành 0
     });
-
+    const alternateSubjects = document.getElementById("alternate-subjects").checked;
     schedule = [];
     let remainingSubjects = subjects.map(s => ({name: s.name, hoursNeeded: s.hoursNeeded}));
     let i=0;
@@ -155,11 +155,16 @@ function generateSchedule() {
         const index = subjects.findIndex(s => s.name === subject.name);
         subjects[index].hoursScheduled += slot.duration;
         subject.hoursNeeded -= slot.duration;
-        if (subject.hoursNeeded <= 0)
-            remainingSubjects.splice(i, 1);
-        else
-            i++;
-        i = i % remainingSubjects.length;
+        if (alternateSubjects) {
+            if (subject.hoursNeeded <= 0)
+                remainingSubjects.splice(i, 1);
+            else
+                i++;
+            i = i % remainingSubjects.length;
+        } else {
+            if (subject.hoursNeeded <= 0)
+                remainingSubjects.splice(i, 1);
+        }
     });
 
     sortSchedule(); // Sắp xếp lịch học

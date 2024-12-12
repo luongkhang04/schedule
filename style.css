@@ -43,6 +43,10 @@ button:hover {
     transform: scale(1.05);
 }
 
+tbody, td, tfoot, th, thead, tr {
+    border-style: none;
+}
+
 #schedule-table-body select {
     min-width: 110px;
     text-overflow: ellipsis;
