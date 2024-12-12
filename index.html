@@ -13,7 +13,7 @@
     <div class="container py-5">
         <h1 class="text-center mb-5 text-primary">Ứng Dụng Xếp Lịch Học</h1>
 
-        <!-- Phần nhập dữ liệu -->
+        <!-- Phần danh sách ca  -->
         <div class="card mb-4 shadow">
             <div class="card-body">
                 <h3 class="card-title text-success">Thêm Ca Học</h3>
@@ -55,6 +55,10 @@
                         <tbody id="slot-table-body"></tbody>
                     </table>
                 </div>
+                <!-- Phần hiển thị tổng thời gian có thể học -->
+                <div class="card-footer text-center">
+                    <strong>Tổng thời gian có thể học: </strong><span id="total-study-time">0</span> giờ/tuần
+                </div>
             </div>
         </div>
 
@@ -68,7 +72,7 @@
                         <input type="text" id="subject-name" class="form-control" placeholder="Ví dụ: Toán">
                     </div>
                     <div class="col-md-4">
-                        <label for="hours-needed" class="form-label">Số giờ cần:</label>
+                        <label for="hours-needed" class="form-label">Số giờ cần học:</label>
                         <input type="number" id="hours-needed" class="form-control" min="1" placeholder="Ví dụ: 3">
                     </div>
                     <div class="col-md-2">
@@ -80,13 +84,17 @@
                         <thead>
                             <tr class="table-warning">
                                 <th>Môn học</th>
-                                <th>Số giờ cần</th>
+                                <th>Số giờ cần học</th>
                                 <th>Số giờ đã xếp</th>
                                 <th>Hành động</th>
                             </tr>
                         </thead>
                         <tbody id="subject-table-body"></tbody>
                     </table>
+                </div>
+                <div class="card-footer text-center">
+                    <strong>Tổng thời gian cần học: </strong><span id="totalTimeNeeded">0</span> giờ/tuần<br>
+                    <strong>Tổng thời gian đã xếp: </strong><span id="totalTimeScheduled">0</span> giờ/tuần
                 </div>
             </div>
         </div>

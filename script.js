@@ -23,6 +23,13 @@ function sortSchedule() {
     });
 }
 
+// Hàm tính thời lượng
+function calculateDuration(start, end) {
+    const [startHour, startMinute] = start.split(':').map(Number);
+    const [endHour, endMinute] = end.split(':').map(Number);
+    return (endHour + endMinute / 60) - (startHour + startMinute / 60);
+}
+
 // Thêm ca 
 function addSlot() {
     const day = document.getElementById('day').value;
@@ -43,20 +50,21 @@ function addSlot() {
     }
 
     slots.push({ day, start, end, duration: calculateDuration(start, end) });
-    sortSlots(); // Sắp xếp ca học
+    sortSlots();
     updateSlotTable();
 }
 
-function calculateDuration(start, end) {
-    const [startHour, startMinute] = start.split(':').map(Number);
-    const [endHour, endMinute] = end.split(':').map(Number);
-    return (endHour + endMinute / 60) - (startHour + startMinute / 60);
-}
-
+// Cập nhật giao diện các ca 
 function updateSlotTable() {
     const tableBody = document.getElementById('slot-table-body');
     tableBody.innerHTML = '';
+    
+    let totalTime = 0; // Khởi tạo biến để tính tổng thời gian
+
     slots.forEach((slot, index) => {
+        const duration = calculateDuration(slot.start, slot.end);
+        totalTime += duration; // Cộng dồn thời gian của các ca học
+
         tableBody.innerHTML += `
             <tr>
                 <td>${slot.day}</td>
@@ -66,8 +74,12 @@ function updateSlotTable() {
             </tr>
         `;
     });
+
+    // Hiển thị tổng thời gian học trong tuần
+    document.getElementById('total-study-time').textContent = totalTime.toFixed(1);
 }
 
+// Xóa ca 
 function deleteSlot(index) {
     slots.splice(index, 1);
     updateSlotTable();
@@ -92,10 +104,15 @@ function addSubject() {
     updateSubjectTable();
 }
 
+// Cập nhật giao diện bảng các môn 
 function updateSubjectTable() {
     const tableBody = document.getElementById('subject-table-body');
     tableBody.innerHTML = '';
+    let totalTimeNeeded = 0;
+    let totalTimeScheduled = 0;
     subjects.forEach((subject, index) => {
+        totalTimeNeeded += subject.hoursNeeded;
+        totalTimeScheduled += subject.hoursScheduled;
         tableBody.innerHTML += `
             <tr>
                 <td>${subject.name}</td>
@@ -105,47 +122,44 @@ function updateSubjectTable() {
             </tr>
         `;
     });
+    document.getElementById('totalTimeNeeded').textContent = totalTimeNeeded.toFixed(1);
+    document.getElementById('totalTimeScheduled').textContent = totalTimeScheduled.toFixed(1);
 }
 
+// Xóa môn 
 function deleteSubject(index) {
     subjects.splice(index, 1);
     updateSubjectTable();
 }
 
+// Xếp lịch 
 function generateSchedule() {
     subjects.forEach(subject => {
         subject.hoursScheduled = 0; // Đặt lại số giờ đã xếp thành 0
     });
 
     schedule = [];
-    const remainingSubjects = subjects.map(s => ({ ...s }));
+    let remainingSubjects = subjects.map(s => ({name: s.name, hoursNeeded: s.hoursNeeded}));
+    let i=0;
 
     slots.forEach(slot => {
         if (remainingSubjects.length === 0) return;
 
-        const subject = remainingSubjects[0];
-        if (subject.hoursNeeded <= slot.duration) {
-            schedule.push({
+        const subject = remainingSubjects[i];
+        schedule.push({
                 day: slot.day,
                 subject: subject.name,
                 start: slot.start,
-                end: calculateEndTime(slot.start, subject.hoursNeeded)
+                end: slot.end
             });
-            const index = subjects.findIndex(s => s.name === subject.name);
-            subjects[index].hoursScheduled += subject.hoursNeeded;
-            subject.hoursNeeded = 0;
-            remainingSubjects.shift();
-        } else {
-            schedule.push({
-                day: slot.day,
-                subject: subject.name,
-                start: slot.start,
-                end: calculateEndTime(slot.start, slot.duration)
-            });
-            const index = subjects.findIndex(s => s.name === subject.name);
-            subjects[index].hoursScheduled += slot.duration;
-            subject.hoursNeeded -= slot.duration;
-        }
+        const index = subjects.findIndex(s => s.name === subject.name);
+        subjects[index].hoursScheduled += slot.duration;
+        subject.hoursNeeded -= slot.duration;
+        if (subject.hoursNeeded <= 0)
+            remainingSubjects.splice(i, 1);
+        else
+            i++;
+        i = i % remainingSubjects.length;
     });
 
     sortSchedule(); // Sắp xếp lịch học
@@ -153,11 +167,10 @@ function generateSchedule() {
     updateScheduleTable();
 }
 
-// Hàm cập nhật bảng lịch học
+// Cập nhật giao diện bảng lịch học
 function updateScheduleTable() {
     const table = document.getElementById("schedule-table-body");
     table.innerHTML = "";
-
     schedule.forEach((entry, index) => {
         table.innerHTML += `
             <tr>
@@ -231,7 +244,7 @@ function saveScheduleEntry(index) {
     }
 
     // Tính toán thời lượng
-    const duration = (new Date(`1970-01-01T${end}`) - new Date(`1970-01-01T${start}`)) / 3600000;
+    const duration = calculateDuration(start, end);
 
     if (duration <= 0) {
         alert("Thời lượng không hợp lệ!");
@@ -239,16 +252,19 @@ function saveScheduleEntry(index) {
     }
 
     // Cập nhật lịch học
-    const previousSubject = schedule[index].subject;
+    const previousEntry = schedule[index];
+    const previousDuration = calculateDuration(previousEntry.start, previousEntry.end);
     schedule[index] = { day, subject, start, end };
 
     // Cập nhật số giờ đã xếp cho các môn học
     subjects.forEach((s) => {
-        if (s.name === previousSubject) {
-            s.hoursScheduled -= duration; // Giảm giờ đã xếp của môn cũ
+        // Giảm số giờ đã xếp cho môn học cũ
+        if (s.name === previousEntry.subject) {
+            s.hoursScheduled -= previousDuration;
         }
+        // Tăng số giờ đã xếp cho môn học mới
         if (s.name === subject) {
-            s.hoursScheduled += duration; // Cộng giờ đã xếp của môn mới
+            s.hoursScheduled += duration;
         }
     });
 
