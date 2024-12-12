@@ -44,8 +44,7 @@ button:hover {
 }
 
 #schedule-table-body select {
-    width: 150px;  /* Chiều rộng cố định cho select */
-    text-overflow: ellipsis;  /* Đảm bảo nếu giá trị quá dài sẽ hiển thị "..." */
-    white-space: nowrap;  /* Ngăn giá trị xuống dòng */
-    overflow: hidden;  /* Ẩn giá trị thừa */
+    min-width: 110px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
