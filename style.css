@@ -47,6 +47,10 @@ button:hover {
     transform: scale(1.05);
 }
 
+button.handle {
+    margin: 0 0 0 10px;
+}
+
 tbody, td, tfoot, th, thead, tr {
     border-style: none;
 }
@@ -55,4 +59,9 @@ tbody, td, tfoot, th, thead, tr {
     min-width: 110px;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+@media only screen and (max-width: 450px) {
+    button.handle {
+        margin: 10px 0 0 0;
+    }
 }
