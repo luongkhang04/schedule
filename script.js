@@ -444,8 +444,7 @@ function exportScheduleToPDF() {
 
     // Chờ nội dung tải xong, sau đó gọi print
     newWindow.onload = () => {
-        await newWindow.print();
-        newWindow.close();
+        newWindow.print();
     };
 }
 
