@@ -435,7 +435,7 @@ function exportScheduleToPDF() {
     `;
 
     // Mở một cửa sổ/tab mới
-    const newWindow = window.open("", "_blank");
+    const newWindow = window.open("0", "_blank");
 
     // Ghi nội dung HTML vào cửa sổ mới
     newWindow.document.open();
@@ -454,7 +454,6 @@ const subjectTableBody = document.getElementById("subject-table-body");
 Sortable.create(subjectTableBody, {
     animation: 150, // Hiệu ứng mượt khi kéo
     handle: '.handle',   // Kéo cả hàng
-    ghostClass: 'sortable-ghost', // Tô sáng khi kéo
     onSort: function () {
         // Cập nhật lại mảng subjects khi thay đổi thứ tự
         const newSubjects = [];
@@ -464,6 +463,5 @@ Sortable.create(subjectTableBody, {
             tr.setAttribute("data-index", i);
         });
         subjects = newSubjects; // Đồng bộ lại mảng subjects
-        console.log(subjects); // In ra để kiểm tra
     },
 });
