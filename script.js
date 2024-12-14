@@ -435,7 +435,7 @@ function exportScheduleToPDF() {
     `;
 
     // Mở một cửa sổ/tab mới
-    const newWindow = window.open("0", "_blank");
+    const newWindow = window.open("", "_blank");
 
     // Ghi nội dung HTML vào cửa sổ mới
     newWindow.document.open();
@@ -445,7 +445,6 @@ function exportScheduleToPDF() {
     // Chờ nội dung tải xong, sau đó gọi print
     newWindow.onload = () => {
         newWindow.print();
-        newWindow.close();
     };
 }
 
