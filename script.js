@@ -398,9 +398,6 @@ function exportScheduleToPDF() {
                 tr:nth-child(even) {
                     background-color: #f9f9f9;
                 }
-                tr:hover {
-                    background-color: #f1f1f1;
-                }
             </style>
         </head>
         <body>
