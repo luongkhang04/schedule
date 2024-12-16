@@ -48,6 +48,7 @@ button:hover {
 
 button.handle {
     margin: 0 0 0 10px;
+    cursor: move;
 }
 
 tbody, td, tfoot, th, thead, tr {
@@ -62,5 +63,6 @@ tbody, td, tfoot, th, thead, tr {
 @media only screen and (max-width: 450px) {
     button.handle {
         margin: 10px 0 0 0;
+        cursor: move;
     }
 }
