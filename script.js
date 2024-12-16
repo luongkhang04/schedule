@@ -337,8 +337,25 @@ function saveScheduleEntry(index) {
     updateSubjectTable();
 }
 
+// Lưu lịch học vào Local Storage
+function saveToBrowser() {
+    localStorage.setItem("slots", JSON.stringify(slots));
+    localStorage.setItem("subjects", JSON.stringify(subjects));
+    localStorage.setItem("schedule", JSON.stringify(schedule));
+}
+
+// Nhập lịch học từ Local Storage
+function importFromBrowser() {
+    slots = JSON.parse(localStorage.getItem("slots"));
+    subjects = JSON.parse(localStorage.getItem("subjects"));
+    schedule = JSON.parse(localStorage.getItem("schedule"));
+    updateSlotTable();
+    updateSubjectTable();
+    updateScheduleTable();
+}
+
 // Xuất lịch ra PDF
-function exportScheduleToPDF() {
+function printToPDF() {
     // Lấy dữ liệu từ bảng (bỏ cột "Chỉnh sửa")
     const table = document.getElementById("schedule-table-body");
     const rows = Array.from(table.children).map((row) => {
