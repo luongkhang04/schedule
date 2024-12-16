@@ -363,21 +363,11 @@ function exportScheduleToPDF() {
                 }
                 header {
                     text-align: center;
-                    padding: 20px 0;
-                    border-bottom: 2px solid #ccc;
-                    margin-bottom: 20px;
+                    padding: 20px 0 40px 0;
                 }
                 h1 {
                     margin: 0.5rem 0 0 0;
                     font-size: 2rem;
-                }
-                footer {
-                    text-align: center;
-                    font-size: 12px;
-                    margin-top: 20px;
-                    padding: 10px;
-                    border-top: 2px solid #ccc;
-                    color: #666;
                 }
                 table {
                     width: 90%;
@@ -389,11 +379,15 @@ function exportScheduleToPDF() {
                     padding: 15px;
                     text-align: center;
                 }
-                th {
+                thead {
                     background-color: #f4b084;
+                    border-top: 0.5px solid #f4b084;
+                    border-bottom: 0.5px solid #f4b084;
                 }
                 tr:nth-child(even) {
-                    background-color: #f5f5f5;
+                    background-color: #fff0e6;
+                    border-top: 0.5px solid #fff0e6;
+                    border-bottom: 0.5px solid #fff0e6;
                 }
             </style>
         </head>
@@ -422,9 +416,6 @@ function exportScheduleToPDF() {
                         .join("")}
                 </tbody>
             </table>
-            <footer>
-                <p>© 2024 - Ứng dụng xếp lịch học. Xuất bản bởi Lương Thái Khang.</p>
-            </footer>
         </body>
         </html>
     `;
