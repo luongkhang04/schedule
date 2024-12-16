@@ -385,9 +385,9 @@ function exportScheduleToPDF() {
                     border-bottom: 0.5px solid #f4b084;
                 }
                 tr:nth-child(even) {
-                    background-color: #fff0e6;
-                    border-top: 0.5px solid #fff0e6;
-                    border-bottom: 0.5px solid #fff0e6;
+                    background-color: #ffeadd;
+                    border-top: 0.5px solid #ffeadd;
+                    border-bottom: 0.5px solid #ffeadd;
                 }
             </style>
         </head>
