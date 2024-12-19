@@ -346,9 +346,15 @@ function saveToBrowser() {
 
 // Nhập lịch học từ Local Storage
 function importFromBrowser() {
-    slots = JSON.parse(localStorage.getItem("slots"));
-    subjects = JSON.parse(localStorage.getItem("subjects"));
-    schedule = JSON.parse(localStorage.getItem("schedule"));
+    let item = localStorage.getItem("slots");
+    if (item != null)
+        slots = JSON.parse(item);
+    item = localStorage.getItem("subjects");
+    if (item != null)
+        subjects = JSON.parse(item);
+    item = localStorage.getItem("schedule");
+    if (item != null)
+        schedule = JSON.parse(item);
     updateSlotTable();
     updateSubjectTable();
     updateScheduleTable();
