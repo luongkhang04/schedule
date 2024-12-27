@@ -69,8 +69,8 @@ function testWithRandomInputs(numTests) {
 
     // Tính trung bình
     console.log("=== Kết quả trung bình ===");
-    console.log("Branch and Bound - Thời gian:", roundToOneDecimal(totalBranchAndBoundTime/numTests), "ms, Hiệu quả:", roundToOneDecimal(totalBranchAndBoundEfficiency/numTests));
-    console.log("Randomized - Thời gian:", roundToOneDecimal(totalRandomTime/numTests), "ms, Hiệu quả:", roundToOneDecimal(totalRandomEfficiency/numTests));
-    console.log("Greedy - Thời gian:", roundToOneDecimal(totalGreedyTime/numTests), "ms, Hiệu quả:", roundToOneDecimal(totalGreedyEfficiency/numTests));
-    console.log("Turn-based - Thời gian:", roundToOneDecimal(totalTurnTime/numTests), "ms, Hiệu quả:", roundToOneDecimal(totalTurnEfficiency/numTests));
+    console.log("Branch and Bound - Thời gian:", roundToOneDecimal(totalBranchAndBoundTime/numTests), "ms, Hiệu quả:", -roundToOneDecimal(totalBranchAndBoundEfficiency/numTests));
+    console.log("Randomized - Thời gian:", roundToOneDecimal(totalRandomTime/numTests), "ms, Hiệu quả:", -roundToOneDecimal(totalRandomEfficiency/numTests));
+    console.log("Greedy - Thời gian:", roundToOneDecimal(totalGreedyTime/numTests), "ms, Hiệu quả:", -roundToOneDecimal(totalGreedyEfficiency/numTests));
+    console.log("Turn-based - Thời gian:", roundToOneDecimal(totalTurnTime/numTests), "ms, Hiệu quả:", -roundToOneDecimal(totalTurnEfficiency/numTests));
 }
