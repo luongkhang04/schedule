@@ -193,18 +193,18 @@ function optimalSchedule(slot, need) {
     function BranchAndBound() {
         if (select.length == slot.length) {
             let f = missingHours(need);
-            if (f < min) {
+            if (f < min-1/60) {
                 min = f;
                 result = select.map((s)=>(s));
             }
-            if (min == 0)
+            if (min < 1/60)
                 return 0;
         } else {
             for (let i=0; i<=need.length; i++) {
                 select.push(i);
                 if (i != need.length)
                     need[i] -= slot[select.length-1];
-                if (lowerBound() < min)
+                if (lowerBound() < min-1/60)
                     if (BranchAndBound()==0)
                         return 0;
                 if (i != need.length)
