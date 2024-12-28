@@ -63,7 +63,7 @@ function updateSlotTable() {
                 <td>${slot.end}</td>
                 <td>
                     <button onclick="deleteSlot(${index})" class="btn btn-danger btn-sm" title="Xóa">
-                        <img src="trash.svg" alt="Xóa">
+                        <img src="/images/trash.svg" alt="Xóa">
                     </button>
                 </td>
             </tr>
@@ -118,10 +118,10 @@ function updateSubjectTable() {
                 <td>${subject.hoursScheduled.toFixed(1)}</td>
                 <td>
                     <button onclick="deleteSubject(this)" class="btn btn-danger btn-sm" title="Xóa">
-                        <img src="trash.svg" alt="Xóa">
+                        <img src="/images/trash.svg" alt="Xóa">
                     </button>
                     <button class="btn btn-info btn-sm handle" title="Di chuyển">
-                        <img src="move.svg" alt="Di chuyển">
+                        <img src="/images/move.svg" alt="Di chuyển">
                     </button>
                 </td>
             </tr>
@@ -286,7 +286,7 @@ function updateScheduleTable() {
                 <td>${entry.end}</td>
                 <td>
                     <button class="btn btn-primary btn-sm" onclick="editScheduleEntry(${index})" title="Chỉnh sửa">
-                        <img src="edit.svg" alt="Chỉnh sửa">
+                        <img src="/images/edit.svg" alt="Chỉnh sửa">
                     </button>
                 </td>
             </tr>
@@ -322,7 +322,7 @@ function editScheduleEntry(index) {
         <td>${entry.end}</td>
         <td>
             <button class="btn btn-success btn-sm" onclick="saveScheduleEntry(${index})" title="Lưu">
-                <img src="save.svg" alt="Lưu">
+                <img src="/images/save.svg" alt="Lưu">
             </button>
         </td>
     `;
