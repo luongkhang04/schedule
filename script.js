@@ -362,14 +362,6 @@ function importFromBrowser() {
 
 // Xuất lịch ra PDF
 function printToPDF() {
-    // Lấy dữ liệu từ bảng (bỏ cột "Chỉnh sửa")
-    const table = document.getElementById("schedule-table-body");
-    const rows = Array.from(table.children).map((row) => {
-        return Array.from(row.children)
-            .slice(0, -1) // Loại bỏ cột cuối cùng (Chỉnh sửa)
-            .map((cell) => cell.textContent.trim());
-    });
-
     // Tạo nội dung HTML cho trang in
     const htmlContent = `
         <!DOCTYPE html>
@@ -429,14 +421,14 @@ function printToPDF() {
                     </tr>
                 </thead>
                 <tbody>
-                    ${rows
-                        .map(
-                            (row) => `
+                    ${schedule.map((entry) => `
                         <tr>
-                            ${row.map((cell) => `<td>${cell}</td>`).join("")}
-                        </tr>`
-                        )
-                        .join("")}
+                            <td>${entry.day}</td>
+                            <td>${entry.subject}</td>
+                            <td>${entry.start}</td>
+                            <td>${entry.end}</td>
+                        </tr>
+                    `).join("")}
                 </tbody>
             </table>
         </body>
