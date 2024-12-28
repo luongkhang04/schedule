@@ -1,11 +1,39 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const path = require('path');
 const app = express();
-const port = process.env.PORT || 3000;
 
+// Cấu hình body-parser để xử lý form data
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// Cấu hình thư mục public cho các file tĩnh
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Cấu hình EJS như view engine
+app.set('view engine', 'ejs');
+
+// Trang chủ (Landing Page)
 app.get('/', (req, res) => {
-  res.send('Hello, world!');
+    res.render('index');
 });
 
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+// Trang đăng nhập
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
+// Trang đăng ký
+app.get('/register', (req, res) => {
+    res.render('register');
+});
+
+// Trang xếp lịch học
+app.get('/sort', (req, res) => {
+    res.render('sort');
+});
+
+// Khởi động server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
