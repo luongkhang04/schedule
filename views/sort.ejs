@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xếp Lịch Học</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/public/css/style.css">
+    <!-- Preload icons -->
+    <link rel="preload" as="image" href="edit.svg">
+    <link rel="preload" as="image" href="move.svg">
+    <link rel="preload" as="image" href="save.svg">
+    <link rel="preload" as="image" href="trash.svg">
+</head>
+<body>
+    <div class="container py-5">
+        <div class="mb-3 d-flex justify-content-center align-items-center flex-wrap">
+            <img src="favicon.png" height="70px" class="mx-3">
+            <h1 class="text-center text-success my-2">
+                Ứng Dụng Xếp Lịch Học
+            </h1>
+        </div>
+        <!-- Phần danh sách ca -->
+        <div class="card mb-4 shadow">
+            <div class="card-body">
+                <h3 class="card-title text-primary">Thêm Ca Học</h3>
+                <div class="row g-3 align-items-end mb-3">
+                    <div class="col-md-4">
+                        <label for="day" class="form-label">Ngày:</label>
+                        <select id="day" class="form-select">
+                            <option value="Thứ Hai">Thứ Hai</option>
+                            <option value="Thứ Ba">Thứ Ba</option>
+                            <option value="Thứ Tư">Thứ Tư</option>
+                            <option value="Thứ Năm">Thứ Năm</option>
+                            <option value="Thứ Sáu">Thứ Sáu</option>
+                            <option value="Thứ Bảy">Thứ Bảy</option>
+                            <option value="Chủ Nhật">Chủ Nhật</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="start-time" class="form-label">Bắt đầu:</label>
+                        <input type="time" id="start-time" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="end-time" class="form-label">Kết thúc:</label>
+                        <input type="time" id="end-time" class="form-control">
+                    </div>
+                    <div class="col-md-2">
+                        <button id="add-slot" class="btn btn-primary w-100 mt-4" onclick="addSlot()">Thêm Ca</button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>Ngày</th>
+                                <th>Bắt đầu</th>
+                                <th>Kết thúc</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="slot-table-body" style="--bs-table-bg: rgb(207 226 255 / 20%);--bs-table-hover-bg: rgb(207 226 255 / 30%);"></tbody>
+                    </table>
+                </div>
+                <!-- Phần hiển thị tổng thời gian có thể học -->
+                <div class="card-footer text-center">
+                    <strong>Tổng thời gian có thể học: </strong><span id="total-study-time">0</span> giờ/tuần
+                </div>
+            </div>
+        </div>
+
+        <!-- Phần danh sách môn học -->
+        <div class="card mb-4 shadow">
+            <div class="card-body">
+                <h3 class="card-title text-warning">Thêm Môn Học</h3>
+                <div class="row g-3 align-items-end mb-3">
+                    <div class="col-md-6">
+                        <label for="subject-name" class="form-label">Tên môn học:</label>
+                        <input type="text" id="subject-name" class="form-control" placeholder="Ví dụ: Toán">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="hours-needed" class="form-label">Số giờ cần học:</label>
+                        <input type="number" id="hours-needed" class="form-control" min="1" placeholder="Ví dụ: 3">
+                    </div>
+                    <div class="col-md-2">
+                        <button id="add-subject" class="btn btn-warning w-100 mt-4" onclick="addSubject()">Thêm Môn</button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr class="table-warning">
+                                <th>Môn học</th>
+                                <th>Số giờ cần học</th>
+                                <th>Số giờ đã xếp</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subject-table-body" style="--bs-table-bg: rgb(255 243 205 / 20%);--bs-table-hover-bg: rgb(255 243 205 / 30%);"></tbody>
+                    </table>
+                </div>
+                <div class="card-footer text-center">
+                    <strong>Tổng thời gian cần học: </strong><span id="totalTimeNeeded">0</span> giờ/tuần<br>
+                    <strong>Tổng thời gian đã xếp: </strong><span id="totalTimeScheduled">0</span> giờ/tuần
+                </div>
+            </div>
+        </div>
+        <!-- Phần xếp lịch -->
+        <div class="card shadow">
+            <div class="card-body">
+                <h3 class="card-title text-danger">Lịch Học</h3>
+                <div class="row g-3 align-items-end mb-3">
+                    <div class="col-md-10">
+                        <label for="sort" class="form-label">Cách sắp xếp các môn:</label>
+                        <select id="sort" class="form-select">
+                            <option value="optimal">Đảm bảo số giờ cần học</option>
+                            <option value="random">Ngẫu nhiên</option>
+                            <option value="greedy">Đan xen</option>
+                            <option value="turn">Lần lượt</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button id="generate-schedule" class="btn btn-danger w-100 mt-4" onclick="generateSchedule()">Xếp Lịch</button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr class="table-danger">
+                                <th>Ngày</th>
+                                <th>Môn học</th>
+                                <th>Bắt đầu</th>
+                                <th>Kết thúc</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="schedule-table-body" style="--bs-table-bg: rgb(248 215 218 / 20%);--bs-table-hover-bg: rgb(248 215 218 / 30%);"></tbody>
+                    </table>
+                </div>
+                <div class="d-flex flex-column align-items-center">
+                    <div class="btn-group mb-3">
+                        <button class="btn btn-outline-danger" onclick="saveToBrowser()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-upload-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 4.095 0 5.555 0 7.318 0 9.366 1.708 11 3.781 11H7.5V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11h4.188C14.502 11 16 9.57 16 7.773c0-1.636-1.242-2.969-2.834-3.194C12.923 1.999 10.69 0 8 0m-.5 14.5V11h1v3.5a.5.5 0 0 1-1 0"/></svg>
+                            Lưu vào browser
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="importFromBrowser()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-download-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 4.095 0 5.555 0 7.318 0 9.366 1.708 11 3.781 11H7.5V5.5a.5.5 0 0 1 1 0V11h4.188C14.502 11 16 9.57 16 7.773c0-1.636-1.242-2.969-2.834-3.194C12.923 1.999 10.69 0 8 0m-.354 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V11h-1v3.293l-2.146-2.147a.5.5 0 0 0-.708.708z"/></svg>
+                            Nhập từ browser
+                        </button>
+                    </div>
+                    <button class="btn btn-outline-success" onclick="printToPDF()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer-fill" viewBox="0 0 16 16"><path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2zm6 8H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1"/><path d="M0 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1"/></svg>
+                        In lịch học (Lưu PDF)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="pt-3 border-top">
+        <p class="text-center text-body-secondary">© 2024 - Ứng dụng xếp lịch học. Xuất bản bởi Lương Thái Khang.</p>
+    </footer>
+    <!-- Script -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script src="/public/js/script.js"></script>
+</body>
+</html>
