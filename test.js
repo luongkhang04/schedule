@@ -25,7 +25,7 @@ function generateBalancedInput() {
 }
 
 // Hàm tính giá trị thiếu giờ
-function missingHours(slot, need, result) {
+function missingHoursTest(slot, need, result) {
     const numSubject = need.length;
     result.forEach((choice, index)=>{
         if (choice<numSubject)
@@ -49,22 +49,22 @@ function testWithRandomInputs(numTests) {
         branchAndBoundTime = performance.now() - startBranchAndBound;
         totalBranchAndBoundTime += branchAndBoundTime;
         console.log(roundToOneDecimal(branchAndBoundTime));
-        totalBranchAndBoundEfficiency += missingHours(slot, structuredClone(need), resultBranchAndBound);
+        totalBranchAndBoundEfficiency += missingHoursTest(slot, structuredClone(need), resultBranchAndBound);
 
         const startRandom = performance.now();
         const resultRandom = randomSchedule(slot, structuredClone(need));
         totalRandomTime += performance.now() - startRandom;
-        totalRandomEfficiency += missingHours(slot, structuredClone(need), resultRandom);
+        totalRandomEfficiency += missingHoursTest(slot, structuredClone(need), resultRandom);
 
         const startGreedy = performance.now();
         const resultGreedy = greedySchedule(slot, structuredClone(need));
         totalGreedyTime += performance.now() - startGreedy;
-        totalGreedyEfficiency += missingHours(slot, structuredClone(need), resultGreedy);
+        totalGreedyEfficiency += missingHoursTest(slot, structuredClone(need), resultGreedy);
 
         const startTurn = performance.now();
         const resultTurn = turnSchedule(slot, structuredClone(need));
         totalTurnTime += performance.now() - startTurn;
-        totalTurnEfficiency += missingHours(slot, structuredClone(need), resultTurn);
+        totalTurnEfficiency += missingHoursTest(slot, structuredClone(need), resultTurn);
     }
 
     // Tính trung bình
