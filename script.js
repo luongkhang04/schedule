@@ -169,25 +169,27 @@ function generateSchedule() {
     updateSubjectTable();
 }
 
+// Hàm mục tiêu: số giờ còn thiếu
+function missingHours(need){
+    let missing = 0;
+    need.forEach((s)=>{
+        missing += Math.max(s,0); 
+    });
+    return missing;
+}
+
 // Thuật toán nhánh cận
 function optimalSchedule(slot, need) {
     let select = [];
     let result = [];
     let min = Infinity;
-    // Hàm mục tiêu: số giờ còn thiếu
-    function missingHours(){
-        let missing = 0;
-        need.forEach((s)=>{
-            missing += Math.max(s,0); 
-        });
-        return missing;
-    }
+
     // Cận dưới
     function lowerBound(){
         let unscheduled = 0;
         for (let i=select.length; i<slot.length; i++)
             unscheduled += slot[i];
-        return missingHours() - unscheduled;
+        return missingHours(need) - unscheduled;
     }
     // Hàm đệ quy
     function BranchAndBound() {
