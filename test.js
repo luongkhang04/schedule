@@ -25,7 +25,7 @@ function generateInput() {
 }
 
 // Hàm kiểm thử với numTests input ngẫu nhiên
-function testWithRandomInputs(numTests) {
+function testWithRandomInputs(numTests = 100) {
     let totalGreedyTime = 0, totalTurnTime = 0, totalBranchAndBoundTime = 0, totalRandomTime = 0, totalBeamTime = 0;
     let totalGreedyEfficiency = 0, totalTurnEfficiency = 0, totalBranchAndBoundEfficiency = 0, totalRandomEfficiency = 0, totalBeamEfficiency = 0;
 
