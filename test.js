@@ -30,7 +30,7 @@ function testWithRandomInputs(numTests) {
     let totalGreedyEfficiency = 0, totalTurnEfficiency = 0, totalBranchAndBoundEfficiency = 0, totalRandomEfficiency = 0, totalBeamEfficiency = 0;
 
     for (let i = 0; i < numTests; i++) {
-        console.log("-- TEST " + (i+1) + " --");
+        console.log("-- TEST", (i+1), "--");
         // Tạo input ngẫu nhiên với điều kiện số need <= số slot
         const { slot, need } = generateInput();
 
@@ -39,37 +39,48 @@ function testWithRandomInputs(numTests) {
         const resultBranchAndBound = optimalSchedule(slot, need);
         branchAndBoundTime = performance.now() - startBranchAndBound;
         totalBranchAndBoundTime += branchAndBoundTime;
-        console.log("Branch and Bound - Thời gian: " + branchAndBoundTime.toFixed(1) + " ms");
-        totalBranchAndBoundEfficiency += missingHours2(slot, need, resultBranchAndBound);
-
-        const startRandom = performance.now();
-        const resultRandom = randomSchedule(slot, need);
-        totalRandomTime += performance.now() - startRandom;
-        totalRandomEfficiency += missingHours2(slot, need, resultRandom);
-
-        const startGreedy = performance.now();
-        const resultGreedy = greedySchedule(slot, need);
-        totalGreedyTime += performance.now() - startGreedy;
-        totalGreedyEfficiency += missingHours2(slot, need, resultGreedy);
-
-        const startTurn = performance.now();
-        const resultTurn = turnSchedule(slot, need);
-        totalTurnTime += performance.now() - startTurn;
-        totalTurnEfficiency += missingHours2(slot, need, resultTurn);
+        branchAndBoundEfficiency = missingHours2(slot, need, resultBranchAndBound);
+        totalBranchAndBoundEfficiency += branchAndBoundEfficiency;
+        console.log("Branch and Bound - Thời gian:", roundToOneDecimal(branchAndBoundTime), "ms, Hiệu quả", -roundToOneDecimal(branchAndBoundEfficiency));
 
         const startBeam = performance.now();
         const resultBeam = beamSearch(slot, need);
         beamTime = performance.now() - startBeam;
         totalBeamTime += beamTime;
-        console.log("Beam Search - Thời gian: " + beamTime.toFixed(1) + " ms");
-        totalBeamEfficiency += missingHours2(slot, need, resultBeam);
+        beamEfficiency = missingHours2(slot, need, resultBeam);
+        totalBeamEfficiency += beamEfficiency;
+        console.log("Beam Search      - Thời gian:", roundToOneDecimal(beamTime), "ms, Hiệu quả:", -roundToOneDecimal(beamEfficiency));
+
+        const startGreedy = performance.now();
+        const resultGreedy = greedySchedule(slot, need);
+        greedyTime = performance.now() - startGreedy;
+        totalGreedyTime += greedyTime;
+        greedyEfficiency = missingHours2(slot, need, resultGreedy);
+        totalGreedyEfficiency += greedyEfficiency;
+        console.log("Greedy           - Thời gian:", roundToOneDecimal(greedyTime), "ms, Hiệu quả:", -roundToOneDecimal(greedyEfficiency));
+
+        const startRandom = performance.now();
+        const resultRandom = randomSchedule(slot, need);
+        randomTime = performance.now() - startRandom;
+        totalRandomTime += randomTime;
+        randomEfficiency = missingHours2(slot, need, resultRandom);
+        totalRandomEfficiency += randomEfficiency;
+        console.log("Randomized       - Thời gian:", roundToOneDecimal(randomTime), "ms, Hiệu quả:", -roundToOneDecimal(randomEfficiency));
+
+        const startTurn = performance.now();
+        const resultTurn = turnSchedule(slot, need);
+        turnTime = performance.now() - startTurn;
+        totalTurnTime += turnTime;
+        turnEfficiency = missingHours2(slot, need, resultTurn);
+        totalTurnEfficiency += turnEfficiency;
+        console.log("Turn-based       - Thời gian:", roundToOneDecimal(turnTime), "ms, Hiệu quả:", -roundToOneDecimal(turnEfficiency));
     }
 
     // Tính trung bình
-    console.log("=== Kết quả trung bình ===");
-    console.log("Branch and Bound - Thời gian:", (totalBranchAndBoundTime/numTests).toFixed(1), "ms, Hiệu quả:", (-totalBranchAndBoundEfficiency/numTests).toFixed(1));
-    console.log("Beam Search - Thời gian:", (totalBeamTime/numTests).toFixed(1), "ms, Hiệu quả:", (-totalBeamEfficiency/numTests).toFixed(1));
-    console.log("Greedy - Thời gian:", (totalGreedyTime/numTests).toFixed(1), "ms, Hiệu quả:", (-totalGreedyEfficiency/numTests).toFixed(1));
-    console.log("Randomized - Thời gian:", (totalRandomTime/numTests).toFixed(1), "ms, Hiệu quả:", (-totalRandomEfficiency/numTests).toFixed(1));
-    console.log("Turn-based - Thời gian:", (totalTurnTime/numTests).toFixed(1), "ms, Hiệu quả:", (-totalTurnEfficiency/numTests).toFixed(1));
+    console.log("=== KẾT QUẢ TRUNG BÌNH ===");
+    console.log("Branch and Bound - Thời gian:", roundToOneDecimal(totalBranchAndBoundTime/numTests), "ms, Hiệu quả:", -roundToOneDecimal(totalBranchAndBoundEfficiency/numTests));
+    console.log("Beam Search      - Thời gian:", roundToOneDecimal(totalBeamTime/numTests), "ms, Hiệu quả:", -roundToOneDecimal(totalBeamEfficiency/numTests));
+    console.log("Greedy           - Thời gian:", roundToOneDecimal(totalGreedyTime/numTests), "ms, Hiệu quả:", -roundToOneDecimal(totalGreedyEfficiency/numTests));
+    console.log("Randomized       - Thời gian:", roundToOneDecimal(totalRandomTime/numTests), "ms, Hiệu quả:", -roundToOneDecimal(totalRandomEfficiency/numTests));
+    console.log("Turn-based       - Thời gian:", roundToOneDecimal(totalTurnTime/numTests), "ms, Hiệu quả:", -roundToOneDecimal(totalTurnEfficiency/numTests));
 }
