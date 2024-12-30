@@ -149,10 +149,12 @@ function generateSchedule() {
     let select = [];
     if (sort == "optimal") 
         select = optimalSchedule(slot, need);
-    else if (sort == "random")
-        select = randomSchedule(slot, need);
     else if (sort == "greedy")
         select = greedySchedule(slot, need);
+    else if (sort == "random")
+        select = randomSchedule(slot, need);
+    else if (sort == "beam")
+        select = beamSearch(slot, need);
     else if (sort == "turn")
         select = turnSchedule(slot, need);
     select.forEach((choice, index) => {
@@ -169,7 +171,7 @@ function generateSchedule() {
     updateSubjectTable();
 }
 
-// Hàm mục tiêu: số giờ còn thiếu
+// Hàm mục tiêu: số giờ còn thiếu (tính theo need)
 function missingHours(need){
     let missing = 0;
     need.forEach((s)=>{
@@ -180,6 +182,7 @@ function missingHours(need){
 
 // Thuật toán nhánh cận
 function optimalSchedule(slot, need) {
+    let myNeed = need.slice();
     let select = [];
     let result = [];
     let min = Infinity;
@@ -189,12 +192,12 @@ function optimalSchedule(slot, need) {
         let unscheduled = 0;
         for (let i=select.length; i<slot.length; i++)
             unscheduled += slot[i];
-        return missingHours(need) - unscheduled;
+        return missingHours(myNeed) - unscheduled;
     }
     // Hàm đệ quy
     function BranchAndBound() {
         if (select.length == slot.length) {
-            let f = missingHours(need);
+            let f = missingHours(myNeed);
             if (f < min-1/60) {
                 min = f;
                 result = select.map((s)=>(s));
@@ -202,21 +205,40 @@ function optimalSchedule(slot, need) {
             if (min < 1/60)
                 return 0;
         } else {
-            for (let i=0; i<=need.length; i++) {
+            for (let i=0; i<=myNeed.length; i++) {
                 select.push(i);
-                if (i != need.length)
-                    need[i] -= slot[select.length-1];
+                if (i != myNeed.length)
+                    myNeed[i] -= slot[select.length-1];
                 if (lowerBound() < min-1/60)
                     if (BranchAndBound()==0)
                         return 0;
-                if (i != need.length)
-                    need[i] += slot[select.length-1];
+                if (i != myNeed.length)
+                    myNeed[i] += slot[select.length-1];
                 select.pop();
             }
         }
     }
     BranchAndBound();
     return result;
+}
+
+// Thuật toán tham lam
+function greedySchedule(slot, need) {
+    let myNeed = need.slice();
+    const select = [];
+    slot.forEach((s) => {
+        let indexOfMax = 0;
+        myNeed.forEach((hoursNeeded, index) => {
+            if (hoursNeeded > myNeed[indexOfMax])
+                indexOfMax = index;
+        });
+        if (myNeed[indexOfMax] > 0) {
+            select.push(indexOfMax);
+            myNeed[indexOfMax] -= s;
+        } else
+            select.push(myNeed.length);
+    });
+    return select;
 }
 
 // Sắp xếp ngẫu nhiên
@@ -240,35 +262,103 @@ function randomSchedule(slot, need) {
     return result;
 }
 
-// Thuật toán tham lam
-function greedySchedule(slot, need) {
-    const select = [];
-    slot.forEach((s) => {
-        let indexOfMax = 0;
-        need.forEach((hoursNeeded, index) => {
-            if (hoursNeeded > need[indexOfMax])
-                indexOfMax = index;
-        });
-        if (need[indexOfMax] > 0) {
-            select.push(indexOfMax);
-            need[indexOfMax] -= s;
-        } else
-            select.push(need.length);
+// Hàm mục tiêu: số giờ còn thiếu (tính theo result)
+function missingHours2(slot, need, result) {
+    let myNeed = need.slice();
+    const numSubject = myNeed.length;
+    result.forEach((choice, index)=>{
+        if (choice<numSubject)
+            myNeed[choice] -= slot[index];
     });
-    return select;
+    return myNeed.reduce((missing, s) => missing + Math.max(s, 0), 0);
+}
+
+// Thuật toán Beam Search
+function beamSearch(slot, need, beamWidth = slot.length/2, maxIterations = 100) {
+    let beam = [];
+    let bestSolution = null;
+    let bestScore = Infinity;
+
+    // Hàm tạo lân cận
+    function generateNeighbors(solution, need, slot) {
+        const neighbors = [];
+        for (let i = 0; i < solution.length; i++) {
+            for (let j = 0; j < need.length; j++) {
+                let neighbor = solution.slice();
+                neighbor[i] = j; // Thay đổi môn học tại ca thứ i
+                neighbors.push(neighbor);
+            }
+        }
+        return neighbors;
+    }
+
+    // Khởi tạo beam bằng các giải pháp ngẫu nhiên
+    for (let i = 0; i < beamWidth; i++) {
+        let randomSolution = randomSchedule(slot, need);
+        beam.push({
+            solution: randomSolution,
+            score: missingHours2(slot, need, randomSolution)
+        });
+    }
+
+    let iteration = 0;
+    while (iteration < maxIterations) {
+        let newBeam = [];
+
+        // Sinh lân cận cho từng giải pháp trong beam
+        for (let entry of beam) {
+            let { solution } = entry;
+            let neighbors = generateNeighbors(solution, need, slot);
+
+            // Đánh giá các giải pháp lân cận
+            for (let neighbor of neighbors) {
+                let newScore = missingHours2(slot, need, neighbor);
+                // Thêm vào mảng lân cận
+                newBeam.push({
+                    solution: neighbor,
+                    score: newScore
+                });
+
+                // Cập nhật giải pháp tốt nhất toàn cục
+                if (newScore < bestScore - 1 / 60) {
+                    bestSolution = neighbor;
+                    bestScore = newScore;
+                }
+            }
+        }
+
+        // Lấy `beamWidth` giải pháp tốt nhất
+        beam = newBeam.splice(0, beamWidth);
+        beam.sort((a, b) => b.score - a.score);
+        for (let entry of newBeam) {
+            if (entry.score < beam[beam.length - 1].score) {
+                beam.pop(); // Loại bỏ phần tử có score lớn nhất trong beam
+                beam.push(entry);
+                beam.sort((a, b) => b.score - a.score); // Sắp xếp lại beam
+            }
+        }
+
+        // Nếu tìm được giải pháp tối ưu, dừng lại
+        if (bestScore < 1 / 60) break;
+
+        iteration++;
+    }
+
+    return bestSolution;
 }
 
 // Sắp xếp lần lượt
 function turnSchedule(slot, need) {
+    let myNeed = need.slice();
     const select = [];
     let index = 0;
     slot.forEach((s) => {
-        if (index == need.length)
+        if (index == myNeed.length)
             select.push(index);
         else {
             select.push(index);
-            need[index] -= s;
-            if (need[index] <= 0)
+            myNeed[index] -= s;
+            if (myNeed[index] <= 0)
                 index++;
         }
     });
