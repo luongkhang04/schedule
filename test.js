@@ -37,41 +37,41 @@ function testWithRandomInputs(numTests = 1000) {
         // Tính thời gian thực thi và hiệu quả cho từng thuật toán
         const startBranchAndBound = performance.now();
         const resultBranchAndBound = optimalSchedule(slot, need);
-        branchAndBoundTime = performance.now() - startBranchAndBound;
+        const branchAndBoundTime = performance.now() - startBranchAndBound;
         totalBranchAndBoundTime += branchAndBoundTime;
-        branchAndBoundEfficiency = missingHours2(slot, need, resultBranchAndBound);
+        const branchAndBoundEfficiency = missingHours2(slot, need, resultBranchAndBound);
         totalBranchAndBoundEfficiency += branchAndBoundEfficiency;
         console.log("Branch and Bound - Thời gian:", roundToOneDecimal(branchAndBoundTime), "ms, Hiệu quả", -roundToOneDecimal(branchAndBoundEfficiency));
 
         const startBeam = performance.now();
         const resultBeam = beamSearch(slot, need);
-        beamTime = performance.now() - startBeam;
+        const beamTime = performance.now() - startBeam;
         totalBeamTime += beamTime;
-        beamEfficiency = missingHours2(slot, need, resultBeam);
+        const beamEfficiency = missingHours2(slot, need, resultBeam);
         totalBeamEfficiency += beamEfficiency;
         console.log("Beam Search      - Thời gian:", roundToOneDecimal(beamTime), "ms, Hiệu quả:", -roundToOneDecimal(beamEfficiency));
 
         const startGreedy = performance.now();
         const resultGreedy = greedySchedule(slot, need);
-        greedyTime = performance.now() - startGreedy;
+        const greedyTime = performance.now() - startGreedy;
         totalGreedyTime += greedyTime;
-        greedyEfficiency = missingHours2(slot, need, resultGreedy);
+        const greedyEfficiency = missingHours2(slot, need, resultGreedy);
         totalGreedyEfficiency += greedyEfficiency;
         console.log("Greedy           - Thời gian:", roundToOneDecimal(greedyTime), "ms, Hiệu quả:", -roundToOneDecimal(greedyEfficiency));
 
         const startRandom = performance.now();
         const resultRandom = randomSchedule(slot, need);
-        randomTime = performance.now() - startRandom;
+        const randomTime = performance.now() - startRandom;
         totalRandomTime += randomTime;
-        randomEfficiency = missingHours2(slot, need, resultRandom);
+        const randomEfficiency = missingHours2(slot, need, resultRandom);
         totalRandomEfficiency += randomEfficiency;
         console.log("Randomized       - Thời gian:", roundToOneDecimal(randomTime), "ms, Hiệu quả:", -roundToOneDecimal(randomEfficiency));
 
         const startTurn = performance.now();
         const resultTurn = turnSchedule(slot, need);
-        turnTime = performance.now() - startTurn;
+        const turnTime = performance.now() - startTurn;
         totalTurnTime += turnTime;
-        turnEfficiency = missingHours2(slot, need, resultTurn);
+        const turnEfficiency = missingHours2(slot, need, resultTurn);
         totalTurnEfficiency += turnEfficiency;
         console.log("Turn-based       - Thời gian:", roundToOneDecimal(turnTime), "ms, Hiệu quả:", -roundToOneDecimal(turnEfficiency));
     }
