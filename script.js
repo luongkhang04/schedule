@@ -274,7 +274,7 @@ function missingHours2(slot, need, result) {
 }
 
 // Thuật toán Beam Search
-function beamSearch(slot, need, beamWidth = slot.length, maxIterations = 3) {
+function beamSearch(slot, need, beamWidth = slot.length, maxIterations = 3*slot.length) {
     let beam = [];
     let bestSolution = null;
     let bestScore = Infinity;
@@ -314,54 +314,66 @@ function beamSearch(slot, need, beamWidth = slot.length, maxIterations = 3) {
     }
 
     let iteration = 0;
-    while (iteration < maxIterations) {
-	seenSolutions = new Set();
-        let newBeam = [];
+let stagnationCount = 0;
+const restartThreshold = 3;
 
-        // Sinh lân cận cho từng giải pháp trong beam
-        for (let entry of beam) {
-            let { solution } = entry;
-            let neighbors = generateNeighbors(solution, need, slot);
+while (iteration < maxIterations) {
+    let seenSolutions = new Set();
+    let newBeam = [];
+    let isBeamImproved = false;
 
-            // Đánh giá các giải pháp lân cận
-            for (let neighbor of neighbors) {
-                let solutionStr = solutionToString(neighbor);
-                if (!seenSolutions.has(solutionStr)) {
-                    seenSolutions.add(solutionStr);
-                    let newScore = missingHours2(slot, need, neighbor);
+    // Sinh lân cận cho từng giải pháp trong beam
+    for (let entry of beam) {
+        let { solution } = entry;
+        let neighbors = generateNeighbors(solution, need, slot);
 
-                    // Thêm vào beam nếu cần thiết
-                    if (newBeam.length < beamWidth || newScore < newBeam[newBeam.length - 1].score) {
-                        newBeam.push({
-                            solution: neighbor,
-                            score: newScore,
-                        });
+        for (let neighbor of neighbors) {
+            let solutionStr = solutionToString(neighbor);
+            if (!seenSolutions.has(solutionStr)) {
+                seenSolutions.add(solutionStr);
+                let newScore = missingHours2(slot, need, neighbor);
 
-                        // Duy trì beamWidth giải pháp tốt nhất
-                        newBeam.sort((a, b) => a.score - b.score);
-                        if (newBeam.length > beamWidth) {
-                            newBeam.pop();
-                        }
-                    }
+                if (newBeam.length < beamWidth || newScore < newBeam[newBeam.length - 1].score) {
+                    newBeam.push({ solution: neighbor, score: newScore });
+                    newBeam.sort((a, b) => a.score - b.score);
+                    if (newBeam.length > beamWidth) newBeam.pop();
                 }
             }
         }
-
-        // Cập nhật beam mới
-        beam = newBeam;
-	//console.log(beam);
-
-        // Cập nhật giải pháp tốt nhất toàn cục
-        if (beam[0].score < bestScore - 1 / 60) {
-            bestSolution = beam[0].solution;
-            bestScore = beam[0].score;
-        }
-
-        // Nếu tìm được giải pháp tối ưu, dừng lại
-        if (bestScore < 1 / 60) break;
-
-        iteration++;
     }
+    //console.log(newBeam);
+    beam = newBeam;
+
+    // Kiểm tra xem beam có cải thiện không
+    if (beam[0].score < bestScore - 1 / 60) {
+        bestSolution = beam[0].solution;
+        bestScore = beam[0].score;
+        stagnationCount = 0; // Reset stagnation
+        isBeamImproved = true;
+    } else {
+        stagnationCount++;
+    }
+
+    // Khởi động lại beam nếu bị mắc kẹt
+    if (stagnationCount >= restartThreshold) {
+	let seenSolutions = new Set();
+        beam = [];
+        for (let i = 0; i < beamWidth; i++) {
+            let randomSolution = randomSchedule(slot, need);
+            let solutionStr = solutionToString(randomSolution);
+            if (!seenSolutions.has(solutionStr)) {
+                seenSolutions.add(solutionStr);
+                beam.push({
+                    solution: randomSolution,
+                    score: missingHours2(slot, need, randomSolution),
+                });
+            }
+        }
+        stagnationCount = 0; // Reset stagnation counter
+    }
+
+    iteration++;
+}
 
     return bestSolution;
 }
