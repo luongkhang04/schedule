@@ -41,6 +41,7 @@ function testWithRandomInputs(numTests = 1000) {
         totalBranchAndBoundTime += branchAndBoundTime;
         const branchAndBoundEfficiency = missingHours2(slot, need, resultBranchAndBound);
         totalBranchAndBoundEfficiency += branchAndBoundEfficiency;
+	//console.log(resultBranchAndBound);
         console.log("Branch and Bound - Thời gian:", roundToOneDecimal(branchAndBoundTime), "ms, Hiệu quả", -roundToOneDecimal(branchAndBoundEfficiency));
 
         const startBeam = performance.now();

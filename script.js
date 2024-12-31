@@ -274,7 +274,7 @@ function missingHours2(slot, need, result) {
 }
 
 // Thuật toán Beam Search
-function beamSearch(slot, need, beamWidth = slot.length/2, maxIterations = 100) {
+function beamSearch(slot, need, beamWidth = slot.length, maxIterations = 3) {
     let beam = [];
     let bestSolution = null;
     let bestScore = Infinity;
@@ -292,17 +292,30 @@ function beamSearch(slot, need, beamWidth = slot.length/2, maxIterations = 100) 
         return neighbors;
     }
 
+    // Hàm chuyển giải pháp thành chuỗi để kiểm tra trùng lặp
+    function solutionToString(solution) {
+        return solution.join(",");
+    }
+
+    let seenSolutions = new Set(); // Dùng để lưu các giải pháp đã thêm vào beam
+
     // Khởi tạo beam bằng các giải pháp ngẫu nhiên
     for (let i = 0; i < beamWidth; i++) {
         let randomSolution = randomSchedule(slot, need);
-        beam.push({
-            solution: randomSolution,
-            score: missingHours2(slot, need, randomSolution)
-        });
+        let solutionStr = solutionToString(randomSolution);
+
+        if (!seenSolutions.has(solutionStr)) {
+            seenSolutions.add(solutionStr);
+            beam.push({
+                solution: randomSolution,
+                score: missingHours2(slot, need, randomSolution),
+            });
+        }
     }
 
     let iteration = 0;
     while (iteration < maxIterations) {
+	seenSolutions = new Set();
         let newBeam = [];
 
         // Sinh lân cận cho từng giải pháp trong beam
@@ -312,30 +325,36 @@ function beamSearch(slot, need, beamWidth = slot.length/2, maxIterations = 100) 
 
             // Đánh giá các giải pháp lân cận
             for (let neighbor of neighbors) {
-                let newScore = missingHours2(slot, need, neighbor);
-                // Thêm vào mảng lân cận
-                newBeam.push({
-                    solution: neighbor,
-                    score: newScore
-                });
+                let solutionStr = solutionToString(neighbor);
+                if (!seenSolutions.has(solutionStr)) {
+                    seenSolutions.add(solutionStr);
+                    let newScore = missingHours2(slot, need, neighbor);
 
-                // Cập nhật giải pháp tốt nhất toàn cục
-                if (newScore < bestScore - 1 / 60) {
-                    bestSolution = neighbor;
-                    bestScore = newScore;
+                    // Thêm vào beam nếu cần thiết
+                    if (newBeam.length < beamWidth || newScore < newBeam[newBeam.length - 1].score) {
+                        newBeam.push({
+                            solution: neighbor,
+                            score: newScore,
+                        });
+
+                        // Duy trì beamWidth giải pháp tốt nhất
+                        newBeam.sort((a, b) => a.score - b.score);
+                        if (newBeam.length > beamWidth) {
+                            newBeam.pop();
+                        }
+                    }
                 }
             }
         }
 
-        // Lấy `beamWidth` giải pháp tốt nhất
-        beam = newBeam.splice(0, beamWidth);
-        beam.sort((a, b) => b.score - a.score);
-        for (let entry of newBeam) {
-            if (entry.score < beam[beam.length - 1].score) {
-                beam.pop(); // Loại bỏ phần tử có score lớn nhất trong beam
-                beam.push(entry);
-                beam.sort((a, b) => b.score - a.score); // Sắp xếp lại beam
-            }
+        // Cập nhật beam mới
+        beam = newBeam;
+	//console.log(beam);
+
+        // Cập nhật giải pháp tốt nhất toàn cục
+        if (beam[0].score < bestScore - 1 / 60) {
+            bestSolution = beam[0].solution;
+            bestScore = beam[0].score;
         }
 
         // Nếu tìm được giải pháp tối ưu, dừng lại
