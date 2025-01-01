@@ -1,4 +1,6 @@
-# Ứng Dụng Xếp Lịch Học
+# Ứng Dụng Xếp Lịch Học <img src="favicon.png" alt="Logo" width="35"/>
+*Phát triển bởi Lương Thái Khang.*  
+*Liên hệ: [Email](mailto:luongkhang448@gmail.com), [Facebook](https://www.facebook.com/luongkhang04/).*  
 
 ## I. Chức năng chính
 Ứng dụng xếp lịch học được thiết kế nhằm giúp người dùng tổ chức thời gian học tập hiệu quả, có chức năng chính là giải quyết bài toán xếp lịch học:
@@ -150,10 +152,12 @@ Thực hiện kiểm thử với 1000 đầu vào ngẫu nhiên thu được k�
 | Lần lượt | <0.1 ms | -5.0 |
 
 ### 3. Phân tích kết quả
-**Thuật toán nhánh cận** đạt hiệu quả tối ưu (số giờ học còn thiếu thấp nhất), nhưng có thời gian thực thi lâu nhất. **Thuật toán Beam Search** nhanh hơn đáng kể, đạt hiệu quả cao. Ba thuật toán còn lại có thời gian thực thi rất nhanh nhưng không đạt hiệu quả cao.  
-Đặc biệt, với một số đầu vào có số lượng ca học và môn học lớn (>16 ca học, >6 môn học) thì thời gian thực thi của thuật toán nhánh cận có thể lên đến hơn 4 giây, trong khi Beam Search thực hiện trong chưa tới 60ms.
-![image](https://github.com/user-attachments/assets/a08d00c4-6beb-4004-98df-0ef97ff9bf48)
-Như vậy, thuật toán nhánh cận là thuật toán phù hợp nhất khi yêu cầu tìm lời giải tối ưu và dữ liệu đầu vào nhỏ. Thuật toán Beam Search là lựa chọn tốt cho các bài toán lớn khi yêu cầu hiệu suất thời gian. 
+***Thuật toán nhánh cận*** đạt hiệu quả tối ưu (số giờ học còn thiếu thấp nhất), nhưng có thời gian thực thi lâu nhất. ***Thuật toán Beam Search*** nhanh hơn đáng kể, đạt hiệu quả cao. Ba thuật toán còn lại có thời gian thực thi rất nhanh nhưng không đạt hiệu quả cao.
+
+Đặc biệt, với một số đầu vào có số lượng ca học và môn học lớn (>16 ca học, >6 môn học) thì thời gian thực thi của thuật toán nhánh cận có thể lên đến hơn 4 giây, trong khi Beam Search thực hiện trong chưa tới 60ms.  
+<img src="https://github.com/user-attachments/assets/a08d00c4-6beb-4004-98df-0ef97ff9bf48" alt="Kết quả kiểm thử" width="600"/>
+
+Như vậy, ***thuật toán nhánh cận*** là thuật toán phù hợp nhất khi yêu cầu tìm lời giải tối ưu và dữ liệu đầu vào nhỏ. ***Thuật toán Beam Search*** là lựa chọn tốt cho các bài toán lớn khi yêu cầu hiệu suất thời gian. 
 
 ## V. Hướng dẫn sử dụng
 Link ứng dụng: [Ứng Dụng Xếp Lịch Học](https://luongkhang04.github.io/schedule/)
