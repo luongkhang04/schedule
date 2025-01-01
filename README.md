@@ -4,21 +4,21 @@
 
 ## I. Chức năng chính
 Ứng dụng xếp lịch học được thiết kế nhằm giúp người dùng tổ chức thời gian học tập hiệu quả, có chức năng chính là giải quyết bài toán xếp lịch học:
-* Đầu vào:
+* **Đầu vào:**
   - Danh sách các ca học khả dụng mỗi tuần bao gồm:
     + Ngày học.
     + Thời gian bắt đầu và kết thúc.
   - Danh sách các môn học bao gồm:
     + Tên môn học.
     + Số giờ cần học.
-* Đầu ra:
+* **Đầu ra:**
   - Lịch học hoàn chỉnh, bao gồm:
     + Ngày học.
     + Môn học.
     + Thời gian bắt đầu và kết thúc.
-* Mục tiêu: Phân bổ đầy đủ số giờ cần học cho từng môn.
+* **Mục tiêu:** Phân bổ đầy đủ số giờ cần học cho từng môn.
 
-Danh sách các ca học:
+**Danh sách các ca học:**
 | Ngày | Bắt đầu | Kết thúc |
 | :-----: | :-----: | :-----: |
 | Thứ Hai | 14:00 | 16:00 |
@@ -28,14 +28,14 @@ Danh sách các ca học:
 | Thứ Sáu | 08:00 | 10:30 |
 | Thứ Bảy | 08:00 | 10:30 |
 
-Danh sách các môn học:
+**Danh sách các môn học:**
 | Môn học | Số giờ cần học |
 | :-----: | :-----: |
 | English | 2 |
 | Giải tích | 5 |
 | Mạng máy tính | 6 |
 
-Lịch học theo tuần:
+**Lịch học theo tuần:**
 | Ngày | Môn học | Bắt đầu | Kết thúc |
 | :-----: | :-----: | :-----: | :-----: |
 | Thứ Hai | English | 14:00 | 16:00 |
@@ -53,12 +53,12 @@ Xây dựng ứng dụng web.
   + Sortable.js: Hỗ trợ kéo thả trong quản lý danh sách môn học.
 
 ## III. Các hàm xếp lịch học
-* Đầu vào:
+* **Đầu vào:**
   + `slot`: một mảng chứa thời lượng các ca học
   + `need`: một mảng chứ số giờ cần học của các môn 
-* Đầu ra:
+* **Đầu ra:**
   + Một mảng chứa chỉ số của môn học được xếp vào từng ca học
-* Ví dụ
+* **Ví dụ:**
 ```
 slot = [2, 1.5, 2.5, 2, 2.5, 2.5];
 need = [2, 5, 6];
