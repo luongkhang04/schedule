@@ -77,7 +77,7 @@ result = [0, 2, 1, 2, 1, 2];
 * Nếu cận dưới lớn hơn số giờ thiếu hiện tại, loại bỏ nhánh này.
 * Tiếp tục tìm kiếm các nhánh khác đến khi tìm được lời giải tối ưu.
 #### c) Độ phức tạp
-* Không gian tìm kiếm: $(n+1)^m$  
+* Không gian tìm kiếm: $n^m$  
 với $n$ là số môn học, $m$ là số ca học khả dụng.  
 Tuy nhiên, sử dụng cận dưới giúp giảm đáng kể không gian tìm kiếm.
 
