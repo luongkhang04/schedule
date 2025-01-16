@@ -314,21 +314,21 @@ function beamSearch(slot, need, beamWidth = slot.length, restartThreshold = 3, m
 	let iteration = 0;
 	let stagnationCount = 0;
 
-	while (iteration++ < maxIterations) {
+	while (iteration++ < maxIterations) { // O(m)
 		seenSolutions = new Set();
 		let newBeam = [];
 		let isBeamImproved = false;
 
 		// Sinh lân cận cho từng giải pháp trong beam
-		for (let entry of beam) {
+		for (let entry of beam) { // O(m)
 			let { solution } = entry;
 			let neighbors = generateNeighbors(solution, need, slot);
 
-			for (let neighbor of neighbors) {
+			for (let neighbor of neighbors) { // O(n*m)
 				let solutionStr = solutionToString(neighbor);
 				if (!seenSolutions.has(solutionStr)) {
 					seenSolutions.add(solutionStr);
-					let newScore = missingHours2(slot, need, neighbor);
+					let newScore = missingHours2(slot, need, neighbor); // O(m)
 
 					if (newBeam.length < beamWidth || newScore < newBeam[newBeam.length - 1].score) {
 						newBeam.push({ solution: neighbor, score: newScore });
@@ -338,7 +338,6 @@ function beamSearch(slot, need, beamWidth = slot.length, restartThreshold = 3, m
 				}
 			}
 		}
-		//console.log(newBeam);
 		beam = newBeam;
 
 		// Kiểm tra xem beam có cải thiện không
