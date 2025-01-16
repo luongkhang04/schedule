@@ -158,14 +158,12 @@ function generateSchedule() {
 	else if (sort == "turn")
 		select = turnSchedule(slot, need);
 	select.forEach((choice, index) => {
-		if (choice < subjects.length) {
-			schedule.push({
-					day: slots[index].day,
-					subject: subjects[choice].name,
-					start: slots[index].start,
-					end: slots[index].end
-				});
-		}
+		schedule.push({
+			day: slots[index].day,
+			subject: subjects[choice].name,
+			start: slots[index].start,
+			end: slots[index].end
+		});
 	});
 	updateScheduleTable();
 	updateSubjectTable();
@@ -205,7 +203,7 @@ function optimalSchedule(slot, need) {
 			if (min < 1/60)
 				return 0;
 		} else {
-			for (let i=0; i<=myNeed.length; i++) {
+			for (let i=0; i<myNeed.length; i++) {
 				select.push(i);
 				if (i != myNeed.length)
 					myNeed[i] -= slot[select.length-1];
