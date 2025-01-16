@@ -77,7 +77,7 @@ result = [0, 2, 1, 2, 1, 2];
 * Nếu cận dưới lớn hơn số giờ thiếu hiện tại, loại bỏ nhánh này.
 * Tiếp tục tìm kiếm các nhánh khác đến khi tìm được lời giải tối ưu.
 #### c) Độ phức tạp
-* Không gian tìm kiếm: $(n+1)^m$  
+* Không gian tìm kiếm: $n^m$  
 với $n$ là số môn học, $m$ là số ca học khả dụng.  
 Tuy nhiên, sử dụng cận dưới giúp giảm đáng kể không gian tìm kiếm.
 
@@ -108,7 +108,7 @@ Tuy nhiên, sử dụng cận dưới giúp giảm đáng kể không gian tìm 
 * Đếm số vòng lặp mà bestScore không thay đổi. Nếu đạt ngưỡng (*3 vòng lặp*), khởi động lại beam với một số giải pháp ngẫu nhiên.
 * Lặp lại đến khi số vòng lặp tối đa (`maxIterations = 3*số ca học`) hoặc khi tìm được lời giải tối ưu.
 #### c) Độ phức tạp
-* $O(n^3∙m^2)$, với $n$ là số ca học, $m$ là số môn học.
+* $O(n∙m^4)$, với $n$ là số môn học, $m$ là số ca học.
  
 ### 5. Xếp lịch lần lượt từng môn
 `turnSchedule(slot, need)`
@@ -118,16 +118,16 @@ Tuy nhiên, sử dụng cận dưới giúp giảm đáng kể không gian tìm 
 * Duyệt qua các ca học và lần lượt gán cho từng môn.
 * Khi một môn học đã đủ số giờ, chuyển sang môn tiếp theo.
 #### c) Độ phức tạp
-* $O(n)$, với $n$ là số lượng ca học.
+* $O(m)$, với $m$ là số lượng ca học.
 
 ### 6. So sánh ý tưởng các thuật toán xếp lịch
 | Thuật toán | Phức tạp | Ưu điểm | Nhược điểm |
 | ----- | ----- | ----- | ----- |
 | Nhánh cận | $O(n^m)$ | Lời giải tối ưu | Xử lý lâu nếu đầu vào lớn |
-| Beam Search | $O(n^3∙m^2)$ | Nhanh, hiệu quả | Không đảm bảo tối ưu |
+| Beam Search | $O(n∙m^4)$ | Nhanh, hiệu quả | Không đảm bảo tối ưu |
 | Tham lam | $O(n∙m)$ | Nhanh, dễ triển khai | Không đảm bảo tối ưu |
 | Ngẫu nhiên | $O(n∙m)$ | Tăng tính đa dạng | Không đảm bảo tối ưu |
-| Lần lượt | $O(n)$ | Đơn giản, nhanh | Không hiệu quả |
+| Lần lượt | $O(m)$ | Đơn giản, nhanh | Không hiệu quả |
 
 ## IV. Kiểm thử
 ### 1. Phương pháp kiểm thử
